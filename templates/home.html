@@ -1,0 +1,113 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  {% for manager_deals in data%}
+  {% for manager, details in manager_deals.items() %}
+  <div class="px-2 py-2" style="border-color: rgb(0, 225, 255);">
+    <div class="d-flex justify-content-between">
+      <h4 class="h4">{{manager}}</h4>
+      {% if details["sum/WON"] %}
+      <h4 class="h4">{{details['sum/WON']}}/10000000</h4>
+      {%else%}
+      <h4 class="h4">0</h4>
+      {%endif%}
+    </div>
+    {% if details["sum/WON"] %}
+    <div class="progress st-2">
+      <div class="progress-bar" role="progressbar" aria-label="Example with label"
+        style="width: {{(details['sum/WON']/10000000*100)|round|int}}%;"
+        aria-valuenow="{{(details['sum/WON']/10000000*100)|round|int}}" aria-valuemin="0" aria-valuemax="100">
+        {{(details["sum/WON"]/10000000*100)|round|int}}%</div>
+    </div>
+    {%else%}
+    <div class="progress st-2">
+      <div class="progress-bar" role="progressbar" aria-label="Example with label" style="width: 0%;" aria-valuenow="0"
+        aria-valuemin="0" aria-valuemax="100">0%</div>
+    </div>
+    {%endif%}
+  </div>
+  <div class="row">
+    <div class="col px-2 py-2"></div>
+    {% if details['sum/WON']%}
+    <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 5px;" data-bs-toggle="collapse" 
+      href="#collapse{{details['sum/WON']}}" role="button" aria-expanded="false"
+      aria-controls="collapse{{details['sum/WON']}}">
+      Выиграны ({{details['sum/WON']}})
+    </div>
+    {%else%}
+    <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 1px;">
+      Выиграны (0)
+    </div>
+    {%endif%}
+
+    {% if details['sum/EXECUTING']%}
+    <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 1px;" data-bs-toggle="collapse"
+      href="#collapse{{details['sum/EXECUTING']}}" role="button" aria-expanded="false"
+      aria-controls="collapse{{details['sum/EXECUTING']}}">
+      В работе({{details['sum/EXECUTING']}})
+    </div>
+    {%else%}
+    <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 1px;">
+      В работе (0)
+    </div>
+    {%endif%}
+
+    {% if details['sum/FINAL_INVIOCE']%}
+    <div class="col text-center px-2 py-2" style="background-color: #7493ad88;" data-bs-toggle="collapse"
+      href="#collapse{{details['sum/FINAL_INVIOCE']}}" role="button" aria-expanded="false"
+      aria-controls="collapse{{details['sum/FINAL_INVIOCE']}}">
+      Выставление счета ({{details['sum/FINAL_INVIOCE']}})
+    </div>
+    {%else%}
+    <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 1px;">
+      Выставление счета (0)
+    </div>
+    {%endif%}
+
+    {% if details['sum/NEW']%}
+    <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 1px;" data-bs-toggle="collapse"
+      href="#collapse{{details['sum/NEW']}}" role="button" aria-expanded="false"
+      aria-controls="collapse{{details['sum/NEW']}}">
+      Потенциальные ({{details['sum/NEW']}})
+    </div>
+    {%else%}
+    <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 1px;">
+      Потенциальные (0)
+    </div>
+    {%endif%}
+
+    <div class="col"></div>
+    <div class="row">
+      <div class="col">
+        {% set rand = range(1, 1000) | random %}
+        <div id="collapseBoss{{rand}}">
+        {% for key, detail in details.items() %}
+        {% if 'sum' not in key%}
+        <div class="collapse" id="collapse{{details['sum/'+key]}}" data-bs-parent="#collapseBoss{{rand}}">
+          <div class="card card-body">
+            <ol class="list-group"></ol>
+            {%for deal in detail%}
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">
+                <div class="fw-bold">{{deal.title}}</div>
+                {{deal.company}}
+              </div>
+              <span class="badge bg-light text-dark fs-6">{{deal.sum}}</span>
+            </li>
+            {%endfor%}
+          </div>
+        </div>
+        {%endif%}
+        {%endfor%}
+      </div>
+      </div>
+    </div>
+  </div>
+
+  {%endfor%}
+  {%endfor%}
+</div>
+
+
+{% endblock %}
