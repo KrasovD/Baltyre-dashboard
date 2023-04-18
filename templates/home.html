@@ -1,24 +1,28 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container mt-4 mb-4">
+  {% include 'form.html' %}
   {% for manager_deals in data%}
   {% for manager, details in manager_deals.items() %}
+  {%if planer[manager]%}
+  {% if planer[manager][1] == 'on'%}
   <div class="px-2 py-2" style="border-color: rgb(0, 225, 255);">
     <div class="d-flex justify-content-between">
       <h4 class="h4">{{manager}}</h4>
       {% if details["sum/WON"] %}
-      <h4 class="h4">{{details['sum/WON']}}/10000000</h4>
+      <h4 class="h4">{{details['sum/WON']}}/{{planer[manager][0]}}</h4>
       {%else%}
       <h4 class="h4">0</h4>
       {%endif%}
     </div>
-    {% if details["sum/WON"] %}
+    {% if details["sum/WON"] and planer[manager][0]%}
     <div class="progress st-2">
       <div class="progress-bar" role="progressbar" aria-label="Example with label"
-        style="width: {{(details['sum/WON']/10000000*100)|round|int}}%;"
-        aria-valuenow="{{(details['sum/WON']/10000000*100)|round|int}}" aria-valuemin="0" aria-valuemax="100">
-        {{(details["sum/WON"]/10000000*100)|round|int}}%</div>
+        style="width: {{(details['sum/WON']/planer[manager][0]|int*100)|round|int}}%;"
+        aria-valuenow="{{(details['sum/WON']/planer[manager][0]|int*100)|round|int}}" aria-valuemin="0"
+        aria-valuemax="100">
+        {{(details["sum/WON"]/planer[manager][0]|int*100)|round|int}}%</div>
     </div>
     {%else%}
     <div class="progress st-2">
@@ -30,7 +34,7 @@
   <div class="row">
     <div class="col px-2 py-2"></div>
     {% if details['sum/WON']%}
-    <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 5px;" data-bs-toggle="collapse" 
+    <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 5px;" data-bs-toggle="collapse"
       href="#collapse{{details['sum/WON']}}" role="button" aria-expanded="false"
       aria-controls="collapse{{details['sum/WON']}}">
       Выиграны ({{details['sum/WON']}})
@@ -82,29 +86,30 @@
       <div class="col">
         {% set rand = range(1, 1000) | random %}
         <div id="collapseBoss{{rand}}">
-        {% for key, detail in details.items() %}
-        {% if 'sum' not in key%}
-        <div class="collapse" id="collapse{{details['sum/'+key]}}" data-bs-parent="#collapseBoss{{rand}}">
-          <div class="card card-body">
-            <ol class="list-group"></ol>
-            {%for deal in detail%}
-            <li class="list-group-item d-flex justify-content-between align-items-start">
-              <div class="ms-2 me-auto">
-                <div class="fw-bold">{{deal.title}}</div>
-                {{deal.company}}
-              </div>
-              <span class="badge bg-light text-dark fs-6">{{deal.sum}}</span>
-            </li>
-            {%endfor%}
+          {% for key, detail in details.items() %}
+          {% if 'sum' not in key%}
+          <div class="collapse" id="collapse{{details['sum/'+key]}}" data-bs-parent="#collapseBoss{{rand}}">
+            <div class="card card-body">
+              <ol class="list-group"></ol>
+              {%for deal in detail%}
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">{{deal.title}}</div>
+                  {{deal.company}}
+                </div>
+                <span class="badge bg-light text-dark fs-6">{{deal.sum}}</span>
+              </li>
+              {%endfor%}
+            </div>
           </div>
+          {%endif%}
+          {%endfor%}
         </div>
-        {%endif%}
-        {%endfor%}
-      </div>
       </div>
     </div>
   </div>
-
+  {%endif%}
+  {%endif%}
   {%endfor%}
   {%endfor%}
 </div>

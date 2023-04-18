@@ -8,22 +8,22 @@ import webhook as web
 b = Bitrix(web.webhook)
 
 def find_managers_name(manager_id: list) -> dict:
-
-    managers = b.get_by_ID('user.get', manager_id, 'id')
     m_dict = dict()
+    with open('files/employees.json', 'r', encoding='utf-8') as file:
+        managers = json.load(file)
     for id in manager_id:
-        m_dict[id] = managers[str(id)][0]['NAME'] + ' ' + managers[str(id)][0]['LAST_NAME']
+        if id in managers.keys():
+            m_dict[id] = managers[str(id)][0]['NAME'] + ' ' + managers[str(id)][0]['LAST_NAME']
+        else:
+            managers[str(id)] = b.get_by_ID('user.get', [id], 'id')[str[id]]
+            m_dict[id] = managers[str(id)][0]['NAME'] + ' ' + managers[str(id)][0]['LAST_NAME']
+            with open('files/employees.json', 'w') as file:
+                json.dump(managers, file)
     return m_dict
 
 def find_companys_name(company_ids: list) -> dict: 
     c_dict = dict()
-    #try:
-    '''        with open('files/companys.json', 'r') as comp:
-            companys = json.load(comp)
-    except:
-        with open('files/companys.json', 'w') as comp:'''
     companys = b.get_all('crm.company.list')
-
     for company in companys:
         if company['ID'] in company_ids:
             c_dict[company['ID']] = company['TITLE']
@@ -157,7 +157,17 @@ def all_json():
 if __name__ == '__main__':
     b = Bitrix(web.webhook)
 
-    print(b.get_by_ID('crm.company.get', [2]))
-
+    with open('files/companys.json', 'w') as file:
+        companys = b.get_all('crm.company.list')
+        c_dict = dict()
+        for company in companys:
+            c_dict[str(company['ID'])] = company
+        json.dump(c_dict, file)
+    with open('files/employees.json', 'w') as file:
+        deal = b.get_all('crm.deal.list')
+        set_ids = set()
+        for id in deal:
+            set_ids.add(id['ASSIGNED_BY_ID'])
+        json.dump(b.get_by_ID('user.get',set_ids, 'id'), file)
 
 

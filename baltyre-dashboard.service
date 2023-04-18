@@ -1,0 +1,13 @@
+[Unit]
+Description=baltyre-dashboard.service - Веб приложение дашборд
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/home/Baltyre-dashboard
+Environment="PATH=/home/Baltyre-dashboard/venv/bin"
+ExecStart=/home/Baltyre-dashboard/venv/bin/python main.py
+
+[Install]
+WantedBy=multi-user.target
