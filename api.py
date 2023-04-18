@@ -9,16 +9,24 @@ b = Bitrix(web.webhook)
 
 def find_managers_name(manager_id: list) -> dict:
     m_dict = dict()
-    with open('files/employees.json', 'r', encoding='utf-8') as file:
-        managers = json.load(file)
+    try:
+        with open('files/employees.json', 'r', encoding='utf-8') as file:
+            managers = json.load(file)
+    except:
+        managers = dict()
     for id in manager_id:
         if id in managers.keys():
             m_dict[id] = managers[str(id)][0]['NAME'] + ' ' + managers[str(id)][0]['LAST_NAME']
         else:
-            managers[str(id)] = b.get_by_ID('user.get', [id], 'id')[str[id]]
-            m_dict[id] = managers[str(id)][0]['NAME'] + ' ' + managers[str(id)][0]['LAST_NAME']
-            with open('files/employees.json', 'w') as file:
-                json.dump(managers, file)
+            try:
+                employee = b.get_by_ID('user.get', [id], 'id')
+                time.sleep(0.5)
+                managers[str(id)] = employee[0]
+                m_dict[id] = managers[str(id)]['NAME'] + ' ' + managers[str(id)]['LAST_NAME']
+            except:
+                pass     
+    with open('files/employees.json', 'w') as file:
+        json.dump(managers, file)
     return m_dict
 
 def find_companys_name(company_ids: list) -> dict: 
