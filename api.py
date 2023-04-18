@@ -16,7 +16,7 @@ def find_managers_name(manager_id: list) -> dict:
         managers = dict()
     for id in manager_id:
         if id in managers.keys():
-            m_dict[id] = managers[str(id)][0]['NAME'] + ' ' + managers[str(id)][0]['LAST_NAME']
+            m_dict[id] = managers[str(id)]['NAME'] + ' ' + managers[str(id)]['LAST_NAME']
         else:
             try:
                 employee = b.get_by_ID('user.get', [id], 'id')
