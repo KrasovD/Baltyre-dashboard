@@ -11,7 +11,7 @@
     <div class="d-flex justify-content-between">
       <h4 class="h4">{{manager}}</h4>
       {% if details["sum/WON"] %}
-      <h4 class="h4">{{details['sum/WON']}}/{{planer[manager][0]}}</h4>
+      <h4 class="h4">{{ "{:,}".format(details["sum/WON"])}}/{{"{:,}".format(planer[manager][0]|int)}}р</h4>
       {%else%}
       <h4 class="h4">0</h4>
       {%endif%}
@@ -37,7 +37,7 @@
     <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 5px;" data-bs-toggle="collapse"
       href="#collapse{{details['sum/WON']}}" role="button" aria-expanded="false"
       aria-controls="collapse{{details['sum/WON']}}">
-      Выиграны ({{details['sum/WON']}})
+      Выиграны ({{"{:,}".format(details['sum/WON'])}}р)
     </div>
     {%else%}
     <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 1px;">
@@ -49,7 +49,7 @@
     <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 1px;" data-bs-toggle="collapse"
       href="#collapse{{details['sum/EXECUTING']}}" role="button" aria-expanded="false"
       aria-controls="collapse{{details['sum/EXECUTING']}}">
-      В работе({{details['sum/EXECUTING']}})
+      В работе({{"{:,}".format(details['sum/EXECUTING'])}}р)
     </div>
     {%else%}
     <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 1px;">
@@ -61,7 +61,7 @@
     <div class="col text-center px-2 py-2" style="background-color: #7493ad88;" data-bs-toggle="collapse"
       href="#collapse{{details['sum/FINAL_INVIOCE']}}" role="button" aria-expanded="false"
       aria-controls="collapse{{details['sum/FINAL_INVIOCE']}}">
-      Выставление счета ({{details['sum/FINAL_INVIOCE']}})
+      Выставление счета ({{"{:,}".format(details['sum/FINAL_INVIOCE'])}}р)
     </div>
     {%else%}
     <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 1px;">
@@ -73,7 +73,7 @@
     <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 1px;" data-bs-toggle="collapse"
       href="#collapse{{details['sum/NEW']}}" role="button" aria-expanded="false"
       aria-controls="collapse{{details['sum/NEW']}}">
-      Потенциальные ({{details['sum/NEW']}})
+      Потенциальные ({{"{:,}".format(details['sum/NEW'])}}р)
     </div>
     {%else%}
     <div class="col text-center px-2 py-2" style="background-color: #7493ad88; border: 1px;">
@@ -97,7 +97,7 @@
                   <div class="fw-bold">{{deal.title}}</div>
                   {{deal.company}}
                 </div>
-                <span class="badge bg-light text-dark fs-6">{{deal.sum}}</span>
+                <span class="badge bg-light text-dark fs-6">{{"{:,}".format(deal.sum|int)}}р</span>
               </li>
               {%endfor%}
             </div>

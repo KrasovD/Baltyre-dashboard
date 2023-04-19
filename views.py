@@ -33,7 +33,9 @@ def planner():
                         try:
                             plan.update({manager: [plan[manager][0], update_plan[manager][1]]})
                         except:
-                            plan.update({manager, update_plan[manager]})
+                            plan.update({manager: update_plan[manager][0]})
+                else:
+                    plan.update({manager: ''})
 
             json.dump(plan, file) 
         return redirect(url_for('home_page'))
